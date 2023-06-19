@@ -40,7 +40,7 @@
 	.main-window {
 		color: black;
 		background-color: white;
-		border-radius: 20px;
+		border-radius: 10px;
 		min-width: 600px;
 		min-height: 200px;
 		display: block;
