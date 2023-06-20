@@ -1,9 +1,16 @@
 <script>
 	import VsArena from '../components/VsArena.svelte';
 	import InputPlaylist from '../components/InputPlaylist.svelte';
+	import Winner from '../components/Winner.svelte';
 	import { getPlayListID, getPlaylistUrls } from '../API/playlistApi';
+
 	let loadedPL = false;
 	let playlistData = [];
+	let winnerObj = {
+		title: 'Rick Astley - Never Gonna Give You Up',
+		videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+	};
+	let isOpen = true;
 
 	const loadPlaylist = async (inputString) => {
 		try {
@@ -19,6 +26,14 @@
 			loadedPL = false;
 		}
 	};
+
+	const setWinner = (winner) => {
+		try {
+			winnerObj = winner;
+		} catch (error) {
+			console.log(error);
+		}
+	};
 </script>
 
 <div class="body">
@@ -28,10 +43,14 @@
 			<p>v0.1</p>
 		</div>
 		{#if loadedPL}
-			<VsArena {playlistData} />
+			<VsArena {playlistData} {setWinner} />
 		{:else}
 			<InputPlaylist {loadPlaylist} />
 		{/if}
+	</div>
+	<Winner {isOpen} {winnerObj} />
+	<div class="footer">
+		<p>GonzDev.2023</p>
 	</div>
 </div>
 
@@ -61,11 +80,36 @@
 		display: block;
 		align-items: center;
 		justify-content: center;
-		padding: 20px;
-		box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+		padding: 25px;
+		border: 3px solid;
+		box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
 	}
 	.logo-title {
 		display: flex;
 		justify-content: center;
+	}
+	.footer {
+		position: fixed;
+		bottom: 10px;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		color: black;
+		background-color: #fff;
+		border-radius: 10px;
+		padding-left: 10px;
+		padding-right: 10px;
+		border: 3px solid;
+		box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+	}
+	@keyframes gradient {
+		0% {
+			background-position: 0% 50%;
+		}
+		50% {
+			background-position: 100% 50%;
+		}
+		100% {
+			background-position: 0% 50%;
+		}
 	}
 </style>

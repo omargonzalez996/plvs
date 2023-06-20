@@ -3,7 +3,7 @@
 	import { RandomIndex } from '../API/functions';
 	import Icon from '@iconify/svelte';
 
-	export let playlistData;
+	export let playlistData, setWinner;
 
 	let leftVideo = {};
 	let rightVideo = {};
@@ -60,10 +60,14 @@
 		try {
 			losers.push(loserIndex);
 			contenders.splice(loserIndex, 1);
-			sortVids().then((res) => {
-				console.log(res);
-				control();
-			});
+			if (contenders.length > 1) {
+				sortVids().then((res) => {
+					console.log(res);
+					control();
+				});
+			} else {
+				setWinner(contenders[0]);
+			}
 		} catch (error) {
 			if (res) {
 				return console.log(res);
@@ -95,7 +99,7 @@
 					frameborder="0"
 				/>
 				<div class="btn-container">
-					<button class="button-left" on:click={removeLoser(rIndex)}>CHOOSE</button>
+					<button class="button" on:click={removeLoser(rIndex)}>CHOOSE</button>
 				</div>
 			</div>
 			<h3 class="middle-vs">VS</h3>
@@ -114,7 +118,7 @@
 					frameborder="0"
 				/>
 				<div class="btn-container">
-					<button class="button-right" on:click={removeLoser(lIndex)}>CHOOSE</button>
+					<button class="button" on:click={removeLoser(lIndex)}>CHOOSE</button>
 				</div>
 			</div>
 		</div>
@@ -148,13 +152,14 @@
 		font-size: 16px;
 		text-align: center;
 	}
-	.button-left {
+	.button {
 		font-family: 'Open Sans', sans-serif;
 		font-size: 16px;
 		letter-spacing: 2px;
 		text-decoration: none;
 		text-transform: uppercase;
 		color: #000;
+		border-radius: 10px;
 		cursor: pointer;
 		border: 3px solid;
 		padding: 0.25em 0.5em;
@@ -170,11 +175,13 @@
 		justify-content: center;
 		padding: 10px;
 	}
+	/*
 	.button-right {
 		font-family: 'Open Sans', sans-serif;
 		font-size: 16px;
 		letter-spacing: 2px;
 		text-decoration: none;
+		border-radius: 10px;
 		text-transform: uppercase;
 		color: #000;
 		cursor: pointer;
@@ -187,19 +194,33 @@
 		-webkit-user-select: none;
 		touch-action: manipulation;
 	}
-	.button-left:active {
+	*/
+	.button:active {
 		box-shadow: 0px 0px 0px 0px;
 		top: 5px;
 		left: 5px;
 	}
+	/*
 	.button-right:active {
 		box-shadow: 0px 0px 0px 0px;
 		top: 5px;
 		right: 5px;
 	}
+	*/
+
 	.middle-vs {
 		margin-left: 10px;
 		margin-right: 10px;
 		font-size: 20px;
+	}
+	.loading-icon {
+		color: #5a5a5a;
+		height: 100%;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 20px;
+		font-size: 40px;
 	}
 </style>

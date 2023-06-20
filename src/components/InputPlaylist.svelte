@@ -120,6 +120,7 @@
 		letter-spacing: 2px;
 		text-decoration: none;
 		text-transform: uppercase;
+		border-radius: 10px;
 		color: #000;
 		cursor: pointer;
 		border: 3px solid;
