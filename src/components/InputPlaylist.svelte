@@ -2,27 +2,14 @@
 	export let loadedPL;
 	export let playlistData;
 	import { getPlayListID, getPlaylistUrls } from '../API/playlistApi';
-
-	var regex = /^.*(youtu.be\/|list=)([^#\&\?]*).*/;
+	import { validatePlaylist } from '../API/functions';
 	let inputString = '';
 	let validPl = 0;
 	let buttonActive = false;
 
 	function handleInputChange(event) {
-		inputString = event.target.value;
-		/*
-		 if (inputString.length == 0) {
-            validPl = 0 // empty playlist input field
-            buttonActive = false
-        } else {
-            if (regex.test(inputString)) {
-                validPl = 1 // valid playlist url
-                buttonActive = true
-            } else {
-                validPl = 2// invalid playlist url
-                buttonActive = false
-            }
-		*/
+		validPl = validatePlaylist(event.target.value);
+
 	}
 
 	const loadPlaylist = async () => {
@@ -42,7 +29,7 @@
 <div>
 	<div class="playlist-input-container">
 		<input
-
+			class:incorrect{validPl}
 			placeholder="playlist URL"
 			on:change={handleInputChange}
 			name="playlist-input"
@@ -75,16 +62,14 @@
 			&:focus {
 				outline: none;
 			}
-
-			&.correct {
-				transition: 0.3s ease;
-				outline: 2px solid lightgreen;
-			}
-
-			&.incorrect {
-				transition: 0.3s ease;
-				outline: 2px solid red;
-			}
 		}
+	}
+	.correct {
+		transition: 0.3s ease;
+		outline: 2px solid lightgreen;
+	}
+	.incorrect {
+		transition: 0.3s ease;
+		outline: 2px solid red;
 	}
 </style>
