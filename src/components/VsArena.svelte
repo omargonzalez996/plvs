@@ -55,33 +55,151 @@
 			}
 		});
 	};
+
+	const removeLoser = (loserIndex) => {
+		try {
+			losers.push(loserIndex);
+			contenders.splice(loserIndex, 1);
+			sortVids().then((res) => {
+				console.log(res);
+				control();
+			});
+		} catch (error) {
+			if (res) {
+				return console.log(res);
+			}
+			return console.log(error);
+		}
+	};
 </script>
 
-<div class="arena-container">
+<div>
 	{#if isLoading}
 		<div class="loading-icon">
 			<Icon icon="eos-icons:loading" />
 		</div>
 	{:else}
-		<div>
-			<div>
+		<div class="arena-container">
+			<div class="left-corner">
+				<div class="vid-title-container">
+					{#if leftVideo.title}
+						<p class="vid-title">{`${leftVideo.title}`}</p>
+					{/if}
+				</div>
 				<iframe
-					width="300"
-					height="200"
-					title={`${leftVideo.title}`}
+					class="ifram"
+					width="640"
+					height="360"
+					title="leftIframe"
 					src={leftVideo.videoUrl}
 					frameborder="0"
 				/>
+				<div class="btn-container">
+					<button class="button-left" on:click={removeLoser(rIndex)}>CHOOSE</button>
+				</div>
 			</div>
-			<div>
+			<h3 class="middle-vs">VS</h3>
+			<div class="right-corner">
+				<div class="vid-title-container">
+					{#if rightVideo.title}
+						<p class="vid-title">{`${leftVideo.title}`}</p>
+					{/if}
+				</div>
 				<iframe
-					width="300"
-					height="200"
-					title={`${rightVideo.title}`}
+					class="ifram"
+					width="640"
+					height="360"
+					title="rightIframe"
 					src={rightVideo.videoUrl}
 					frameborder="0"
 				/>
+				<div class="btn-container">
+					<button class="button-right" on:click={removeLoser(lIndex)}>CHOOSE</button>
+				</div>
 			</div>
 		</div>
 	{/if}
 </div>
+
+<style>
+	.arena-container {
+		padding: 5px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.left-corner {
+		display: block;
+		align-items: center;
+	}
+	.right-corner {
+		display: block;
+		align-items: center;
+	}
+	.ifram {
+		width: 100%;
+		min-height: 320px;
+	}
+	.vid-title-container {
+		height: 50px;
+		margin-bottom: 5px;
+	}
+	.vid-title {
+		font-size: 16px;
+		text-align: center;
+	}
+	.button-left {
+		font-family: 'Open Sans', sans-serif;
+		font-size: 16px;
+		letter-spacing: 2px;
+		text-decoration: none;
+		text-transform: uppercase;
+		color: #000;
+		cursor: pointer;
+		border: 3px solid;
+		padding: 0.25em 0.5em;
+		box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+		position: relative;
+		user-select: none;
+		-webkit-user-select: none;
+		touch-action: manipulation;
+	}
+	.btn-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 10px;
+	}
+	.button-right {
+		font-family: 'Open Sans', sans-serif;
+		font-size: 16px;
+		letter-spacing: 2px;
+		text-decoration: none;
+		text-transform: uppercase;
+		color: #000;
+		cursor: pointer;
+		border: 3px solid;
+		padding: 0.25em 0.5em;
+		box-shadow: -1px 1px 0px 0px, -2px 2px 0px 0px, -3px 3px 0px 0px, -4px 4px 0px 0px,
+			-5px 5px 0px 0px;
+		position: relative;
+		user-select: none;
+		-webkit-user-select: none;
+		touch-action: manipulation;
+	}
+	.button-left:active {
+		box-shadow: 0px 0px 0px 0px;
+		top: 5px;
+		left: 5px;
+	}
+	.button-right:active {
+		box-shadow: 0px 0px 0px 0px;
+		top: 5px;
+		right: 5px;
+	}
+	.middle-vs {
+		margin-left: 10px;
+		margin-right: 10px;
+		font-size: 20px;
+	}
+</style>
