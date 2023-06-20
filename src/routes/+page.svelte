@@ -3,6 +3,10 @@
 	import InputPlaylist from '../components/InputPlaylist.svelte';
 	let loadedPL = false;
 	let playlistData = [];
+
+	playlistData: {
+		console.log(playlistData);
+	}
 </script>
 
 <div class="body">
