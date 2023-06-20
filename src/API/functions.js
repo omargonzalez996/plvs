@@ -22,3 +22,13 @@ export function activateButton(inputState) {
 		return false; //incorrect input
 	}
 }
+
+export const RandomIndex = (itemList) => {
+	try {
+		let max = itemList.length - 1;
+		let randomNumInRange = Math.floor(Math.random() * max)
+		return (randomNumInRange)
+	} catch (error) {
+		console.log(error);
+	}
+}
