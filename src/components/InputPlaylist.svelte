@@ -1,37 +1,26 @@
 <script>
-	import { onMount } from 'svelte';
-	import { getPlayListID, getPlaylistUrls } from '../API/playlistApi';
 	import { validatePlaylist, activateButton } from '../API/functions';
 	import Icon from '@iconify/svelte';
 
-	export let loadedPL;
-	export let playlistData;
+	export let loadPlaylist;
 
 	let inputString = '';
 	let validPl = 0;
 	let buttonActive = false;
-	let isLoading = true;
-
-	onMount(() => {
-		isLoading = false;
-	});
+	let isLoading = false;
 
 	function handleInputChange(event) {
-		validPl = validatePlaylist(event.target.value);
+		inputString = event.target.value;
+		validPl = validatePlaylist(inputString);
 		buttonActive = activateButton(validPl);
 	}
 
-	const loadPlaylist = async () => {
-		isLoading = true;
+	const sendPL = () => {
 		try {
+			isLoading = true;
 			buttonActive = false;
-			let playlistID = await getPlayListID(inputString);
-			await getPlaylistUrls(playlistID).then((data) => {
-				playlistData = data;
-				console.log(playlistData);
-				loadedPL = true;
-				isLoading = false;
-			});
+			loadPlaylist(inputString);
+			isLoading = false;
 		} catch (error) {
 			console.log(error);
 			isLoading = false;
@@ -42,7 +31,9 @@
 <div>
 	<div class="playlist-input-container">
 		{#if isLoading}
-			<Icon icon="eos-icons:loading" />
+			<div class="loading-icon">
+				<Icon icon="eos-icons:loading" />
+			</div>
 		{:else}
 			<input
 				class:input={validPl === 0}
@@ -55,9 +46,7 @@
 			/>
 			<div class="under-input">
 				<div class="left">
-					<button class="button" disabled={!buttonActive} on:click={loadPlaylist}
-						>Load Playlist</button
-					>
+					<button class="button" disabled={!buttonActive} on:click={sendPL}>Load Playlist</button>
 				</div>
 				<div class="right">
 					{#if validPl === 0}
@@ -122,7 +111,7 @@
 		justify-content: space-evenly;
 	}
 	.input-info {
-		color: red;
+		color: gray;
 	}
 
 	.button {
@@ -153,5 +142,15 @@
 		top: 5px;
 		left: 5px;
 		pointer-events: none;
+	}
+	.loading-icon {
+		color: #5a5a5a;
+		height: 100%;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 20px;
+		font-size: 40px;
 	}
 </style>

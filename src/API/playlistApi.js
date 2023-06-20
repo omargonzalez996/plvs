@@ -14,8 +14,8 @@ export async function getPlayListID(playListUrl) {
 }
 
 export async function getPlaylistUrls(playlistId) {
-    const apiKey = import.meta.env.VITE_API_KEY;
     return new Promise(async (resolve, reject) => {
+        const apiKey = "AIzaSyCu9sjJhiTY7JCb93RMBLaWxO4GegQVm5Y";
         try {
             await fetch(
                 `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`
@@ -26,7 +26,6 @@ export async function getPlaylistUrls(playlistId) {
                         title: `${item.snippet.title}`,
                         videoUrl: `https://www.youtube.com/embed/${item.snippet.resourceId.videoId}`
                     }));
-                    //console.log(videoData);
                     resolve(videoData)
                 })
                 .catch(error => {

@@ -1,12 +1,24 @@
 <script>
 	import VsArena from '../components/VsArena.svelte';
 	import InputPlaylist from '../components/InputPlaylist.svelte';
+	import { getPlayListID, getPlaylistUrls } from '../API/playlistApi';
 	let loadedPL = false;
 	let playlistData = [];
 
-	playlistData: {
-		console.log(playlistData);
-	}
+	const loadPlaylist = async (inputString) => {
+		try {
+			console.log('nope: ', inputString);
+			let playlistID = await getPlayListID(inputString);
+			await getPlaylistUrls(playlistID).then((data) => {
+				playlistData = data;
+				console.log(playlistData);
+				loadedPL = true;
+			});
+		} catch (error) {
+			console.log(error);
+			loadedPL = false;
+		}
+	};
 </script>
 
 <div class="body">
@@ -18,7 +30,7 @@
 		{#if loadedPL}
 			<VsArena {playlistData} />
 		{:else}
-			<InputPlaylist {loadedPL} {playlistData} />
+			<InputPlaylist {loadPlaylist} />
 		{/if}
 	</div>
 </div>
