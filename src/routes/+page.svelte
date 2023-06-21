@@ -10,7 +10,7 @@
 		title: 'Rick Astley - Never Gonna Give You Up',
 		videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
 	};
-	let isOpen = true;
+	let isOpen = false;
 
 	const loadPlaylist = async (inputString) => {
 		try {
@@ -30,6 +30,7 @@
 	const setWinner = (winner) => {
 		try {
 			winnerObj = winner;
+			isOpen = true;
 		} catch (error) {
 			console.log(error);
 		}

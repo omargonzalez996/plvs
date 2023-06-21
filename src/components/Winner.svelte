@@ -1,7 +1,6 @@
 <script>
 	import Icon from '@iconify/svelte';
-	export let isOpen = false;
-	export let winnerObj;
+	export let winnerObj, isOpen;
 
 	function closeModal() {
 		isOpen = false;

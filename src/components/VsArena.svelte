@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { RandomIndex } from '../API/functions';
 	import Icon from '@iconify/svelte';
+	import Control from './Control.svelte';
 
 	export let playlistData, setWinner;
 
@@ -12,10 +13,14 @@
 	let lIndex;
 	let rIndex;
 	let roundCount = 0;
+	let contendersCount = 0;
+	let losersCount = 0;
 	let isLoading = true;
+
 	onMount(() => {
 		contenders = playlistData;
-		if (contenders.length >= 2) {
+		contendersCount = contenders.length;
+		if (contendersCount >= 2) {
 			sortVids().then(() => {
 				control();
 			});
@@ -24,15 +29,15 @@
 
 	const control = () => {
 		console.log(`round: ${roundCount}`);
-		console.log(`remaining: ${contenders.length}`);
-		console.log(`losers: ${losers.length}`);
+		console.log(`remaining: ${contendersCount}`);
+		console.log(`losers: ${losersCount}`);
 	};
 
 	const sortVids = () => {
 		return new Promise((resolve, reject) => {
 			try {
 				isLoading = true;
-				if (contenders.length > 1) {
+				if (contendersCount > 1) {
 					roundCount++;
 					do {
 						lIndex = RandomIndex(contenders);
@@ -58,26 +63,32 @@
 
 	const removeLoser = (loserIndex) => {
 		try {
+			isLoading = true;
 			losers.push(loserIndex);
+			losersCount = losers.length;
 			contenders.splice(loserIndex, 1);
-			if (contenders.length > 1) {
-				sortVids().then((res) => {
-					console.log(res);
+			contendersCount = contenders.length;
+			if (contendersCount > 1) {
+				sortVids().then(() => {
 					control();
 				});
 			} else {
 				setWinner(contenders[0]);
 			}
+			isLoading = false;
 		} catch (error) {
 			if (res) {
+				isLoading = false;
 				return console.log(res);
 			}
+			isLoading = false;
 			return console.log(error);
 		}
 	};
 </script>
 
 <div>
+	<Control {losersCount} {contendersCount} {roundCount} />
 	{#if isLoading}
 		<div class="loading-icon">
 			<Icon icon="eos-icons:loading" />
@@ -99,14 +110,14 @@
 					frameborder="0"
 				/>
 				<div class="btn-container">
-					<button class="button" on:click={removeLoser(rIndex)}>CHOOSE</button>
+					<button disabled={isLoading} class="button" on:click={removeLoser(rIndex)}>CHOOSE</button>
 				</div>
 			</div>
 			<h3 class="middle-vs">VS</h3>
 			<div class="right-corner">
 				<div class="vid-title-container">
 					{#if rightVideo.title}
-						<p class="vid-title">{`${leftVideo.title}`}</p>
+						<p class="vid-title">{`${rightVideo.title}`}</p>
 					{/if}
 				</div>
 				<iframe
@@ -118,7 +129,7 @@
 					frameborder="0"
 				/>
 				<div class="btn-container">
-					<button class="button" on:click={removeLoser(lIndex)}>CHOOSE</button>
+					<button disabled={isLoading} class="button" on:click={removeLoser(lIndex)}>CHOOSE</button>
 				</div>
 			</div>
 		</div>
@@ -152,6 +163,12 @@
 		font-size: 16px;
 		text-align: center;
 	}
+	.btn-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 10px;
+	}
 	.button {
 		font-family: 'Open Sans', sans-serif;
 		font-size: 16px;
@@ -169,45 +186,22 @@
 		-webkit-user-select: none;
 		touch-action: manipulation;
 	}
-	.btn-container {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 10px;
+	.button:hover {
+		color: rgb(150, 15, 78);
+		transition: ease-in-out;
 	}
-	/*
-	.button-right {
-		font-family: 'Open Sans', sans-serif;
-		font-size: 16px;
-		letter-spacing: 2px;
-		text-decoration: none;
-		border-radius: 10px;
-		text-transform: uppercase;
-		color: #000;
-		cursor: pointer;
-		border: 3px solid;
-		padding: 0.25em 0.5em;
-		box-shadow: -1px 1px 0px 0px, -2px 2px 0px 0px, -3px 3px 0px 0px, -4px 4px 0px 0px,
-			-5px 5px 0px 0px;
-		position: relative;
-		user-select: none;
-		-webkit-user-select: none;
-		touch-action: manipulation;
-	}
-	*/
 	.button:active {
 		box-shadow: 0px 0px 0px 0px;
 		top: 5px;
 		left: 5px;
 	}
-	/*
-	.button-right:active {
+	.button:disabled {
+		filter: contrast(30%);
 		box-shadow: 0px 0px 0px 0px;
 		top: 5px;
-		right: 5px;
+		left: 5px;
+		pointer-events: none;
 	}
-	*/
-
 	.middle-vs {
 		margin-left: 10px;
 		margin-right: 10px;
