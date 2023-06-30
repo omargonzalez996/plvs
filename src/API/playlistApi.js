@@ -1,3 +1,4 @@
+//Funcion para obtener el id de la playlist
 export async function getPlayListID(playListUrl) {
     return new Promise(async (resolve, reject) => {
         try {
@@ -12,7 +13,7 @@ export async function getPlayListID(playListUrl) {
         }
     })
 }
-
+//funcion que recibe el id de la playlist y consume la api de google para generar un array con la info de los videos de la playlist
 export async function getPlaylistUrls(playlistId) {
     return new Promise(async (resolve, reject) => {
         const apiKey = "AIzaSyCu9sjJhiTY7JCb93RMBLaWxO4GegQVm5Y";

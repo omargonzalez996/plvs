@@ -39,6 +39,7 @@
 		background-color: white;
 		padding: 25px;
 		border: 3px solid;
+		border-radius: 10px;
 		height: 20px;
 		display: flex;
 		align-items: center;
@@ -50,6 +51,7 @@
 		height: 20px;
 		padding: 25px;
 		border: 3px solid;
+		border-radius: 10px;
 		height: 20px;
 		display: flex;
 		align-items: center;
@@ -63,6 +65,7 @@
 		height: 20px;
 		padding: 25px;
 		border: 3px solid;
+		border-radius: 10px;
 		height: 20px;
 		display: flex;
 		align-items: center;

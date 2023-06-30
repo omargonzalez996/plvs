@@ -22,35 +22,36 @@
 		contendersCount = contenders.length;
 		if (contendersCount >= 2) {
 			sortVids().then(() => {
-				control();
+				//control();
 			});
 		}
 	});
 
-	const control = () => {
-		console.log(`round: ${roundCount}`);
-		console.log(`remaining: ${contendersCount}`);
-		console.log(`losers: ${losersCount}`);
-	};
-
 	const sortVids = () => {
+		console.log('checkSort');
 		return new Promise((resolve, reject) => {
 			try {
 				isLoading = true;
-				if (contendersCount > 1) {
-					roundCount++;
+				roundCount++;
+				if (contendersCount > 2) {
+					console.log('3 or more');
 					do {
 						lIndex = RandomIndex(contenders);
 						rIndex = RandomIndex(contenders);
 					} while (lIndex == rIndex);
 					leftVideo = contenders[lIndex];
 					rightVideo = contenders[rIndex];
-					console.log('leftVideo', leftVideo);
-					console.log('rightVideo', rightVideo);
 					isLoading = false;
-				} else {
-					//ended = true;
-					console.log('Winner: ', contenders);
+				}
+				if (contendersCount === 2) {
+					console.log('2 left');
+					lIndex = 0;
+					rIndex = 1;
+					isLoading = false;
+				}
+				if (contendersCount === 1) {
+					console.log('Winner: ', contenders[0]);
+					ended = true;
 					isLoading = false;
 				}
 				resolve();
@@ -62,6 +63,7 @@
 	};
 
 	const removeLoser = (loserIndex) => {
+		console.log('checkRemove.click');
 		try {
 			isLoading = true;
 			losers.push(loserIndex);
@@ -69,20 +71,15 @@
 			contenders.splice(loserIndex, 1);
 			contendersCount = contenders.length;
 			if (contendersCount > 1) {
-				sortVids().then(() => {
-					control();
-				});
+				sortVids();
 			} else {
 				setWinner(contenders[0]);
 			}
 			isLoading = false;
 		} catch (error) {
-			if (res) {
-				isLoading = false;
-				return console.log(res);
-			}
 			isLoading = false;
-			return console.log(error);
+			console.log(error);
+			return;
 		}
 	};
 </script>
@@ -103,8 +100,8 @@
 				</div>
 				<iframe
 					class="ifram"
-					width="640"
-					height="360"
+					width="426"
+					height="240"
 					title="leftIframe"
 					src={leftVideo.videoUrl}
 					frameborder="0"
@@ -122,8 +119,8 @@
 				</div>
 				<iframe
 					class="ifram"
-					width="640"
-					height="360"
+					width="426"
+					height="240"
 					title="rightIframe"
 					src={rightVideo.videoUrl}
 					frameborder="0"
@@ -153,7 +150,7 @@
 	}
 	.ifram {
 		width: 100%;
-		min-height: 320px;
+		min-height: 240px;
 	}
 	.vid-title-container {
 		height: 50px;
